@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Raspberry Pi
+*.img
+*.zip
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Local configuration
+config.local.json
+.env
+
+# Backups
+*.bak
+*.backup
+
+# Node modules (if adding frontend build tools)
+node_modules/
+package-lock.json
+
+# Test files
+test_output/
+*.test.js
+
+# Personal notes
+notes.md
+TODO.md

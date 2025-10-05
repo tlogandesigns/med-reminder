@@ -1,0 +1,39 @@
+{
+  "schedule": [
+    {
+      "name": "Morning Medicine",
+      "hour": 7,
+      "minute": 45,
+      "enabled": true
+    },
+    {
+      "name": "Night Medicine",
+      "hour": 22,
+      "minute": 0,
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "timezone": "America/New_York",
+    "alertWindow": 300,
+    "display": {
+      "width": 250,
+      "height": 122,
+      "rotation": 0
+    },
+    "history": {
+      "maxEntries": 100,
+      "storageType": "localStorage"
+    }
+  },
+  "notifications": {
+    "visual": true,
+    "audio": false,
+    "vibration": false
+  },
+  "ui": {
+    "theme": "blackwhite",
+    "font": "monospace",
+    "language": "en"
+  }
+}

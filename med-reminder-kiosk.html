@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Optimized for 2.13" e-Paper (250x122px) - Black & White only */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Courier New', monospace; /* Better on e-Paper */
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .container-fluid {
+            width: 250px;
+            height: 122px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        
+        /* Normal state - white background, black text */
+        .normal-state {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        /* Alert state - inverted colors (black background, white text) */
+        .alert-state {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        .clock {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .countdown {
+            font-size: 14px;
+            margin: 3px 0;
+            line-height: 1.2;
+            text-align: center;
+        }
+        
+        .alert-state .countdown {
+            display: none;
+        }
+        
+        .alert-message {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 5px 0;
+            text-align: center;
+            display: none;
+            line-height: 1.2;
+        }
+        
+        .alert-state .alert-message {
+            display: block;
+        }
+        
+        .med-name {
+            font-size: 12px;
+            margin: 2px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .btn-took-it {
+            font-size: 16px;
+            padding: 8px 16px;
+            background-color: #000000;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .alert-state .btn-took-it {
+            display: block;
+        }
+        
+        .btn-took-it:active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .success-message {
+            font-size: 16px;
+            font-weight: 700;
+            display: none;
+            text-align: center;
+        }
+        
+        .history-btn {
+            position: fixed;
+            bottom: 2px;
+            right: 2px;
+            font-size: 10px;
+            padding: 3px 6px;
+            background-color: #000000;
+            border: 1px solid #000000;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        .alert-state .history-btn {
+            display: none;
+        }
+        
+        /* Optimize for e-Paper refresh */
+        * {
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="normal-state">
+    <div class="container-fluid">
+        <div class="clock" id="clock">--:--:--</div>
+        
+        <div class="med-name" id="medName">Morning Medicine</div>
+        
+        <div class="countdown" id="countdown">
+            Next dose in: --:--:--
+        </div>
+        
+        <div class="alert-message" id="alertMessage">
+            TAKE MEDICINE NOW
+        </div>
+        
+        <button class="btn btn-took-it" id="tookItBtn">
+            TOOK IT
+        </button>
+        
+        <div class="success-message" id="successMessage">
+            LOGGED!
+        </div>
+    </div>
+    
+    <button class="btn history-btn" onclick="showHistory()">History</button>
+
+    <script>
+        // Medicine schedule (EST)
+        const schedule = [
+            { name: "Morning Medicine", hour: 7, minute: 45 },
+            { name: "Night Medicine", hour: 22, minute: 0 }
+        ];
+        
+        let currentAlert = null;
+        let isAlertActive = false;
+        
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                timeZone: 'America/New_York',
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+        
+        function getNextDose() {
+            const now = new Date();
+            const estNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            
+            const currentHour = estNow.getHours();
+            const currentMinute = estNow.getMinutes();
+            const currentSeconds = estNow.getSeconds();
+            
+            let nextDose = null;
+            let minDiff = Infinity;
+            
+            for (let dose of schedule) {
+                const doseTime = new Date(estNow);
+                doseTime.setHours(dose.hour, dose.minute, 0, 0);
+                
+                let diff = doseTime - estNow;
+                
+                // If dose time has passed today, check tomorrow
+                if (diff < 0) {
+                    doseTime.setDate(doseTime.getDate() + 1);
+                    diff = doseTime - estNow;
+                }
+                
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    nextDose = { ...dose, time: doseTime, diff: diff };
+                }
+            }
+            
+            return nextDose;
+        }
+        
+        function shouldShowAlert(dose) {
+            // Show alert if we're within 5 minutes before or after dose time
+            const diff = dose.diff / 1000; // Convert to seconds
+            return diff <= 300 && diff >= -300; // 5 minutes window
+        }
+        
+        function updateCountdown() {
+            const nextDose = getNextDose();
+            
+            if (!nextDose) return;
+            
+            // Update medicine name
+            document.getElementById('medName').textContent = nextDose.name;
+            
+            // Check if we should show alert
+            if (shouldShowAlert(nextDose) && !isAlertActive) {
+                showAlert(nextDose);
+            } else if (!shouldShowAlert(nextDose) && isAlertActive) {
+                hideAlert();
+            }
+            
+            // Update countdown
+            const hours = Math.floor(nextDose.diff / (1000 * 60 * 60));
+            const minutes = Math.floor((nextDose.diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((nextDose.diff % (1000 * 60)) / 1000);
+            
+            const countdownText = `Next dose in: ${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById('countdown').textContent = countdownText;
+            
+            currentAlert = nextDose;
+        }
+        
+        function showAlert(dose) {
+            isAlertActive = true;
+            document.body.className = 'alert-state';
+            document.getElementById('medName').textContent = dose.name;
+        }
+        
+        function hideAlert() {
+            isAlertActive = false;
+            document.body.className = 'normal-state';
+        }
+        
+        function logDose() {
+            const now = new Date();
+            const timestamp = now.toLocaleString('en-US', { timeZone: 'America/New_York' });
+            
+            // Get existing history
+            let history = JSON.parse(localStorage.getItem('medHistory') || '[]');
+            
+            // Add new entry
+            history.unshift({
+                name: currentAlert.name,
+                timestamp: timestamp,
+                scheduledTime: `${currentAlert.hour}:${String(currentAlert.minute).padStart(2, '0')}`
+            });
+            
+            // Keep only last 100 entries
+            if (history.length > 100) {
+                history = history.slice(0, 100);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('medHistory', JSON.stringify(history));
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Hide alert
+            hideAlert();
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+        }
+        
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem('medHistory') || '[]');
+            
+            if (history.length === 0) {
+                alert('No dose history yet.');
+                return;
+            }
+            
+            let historyText = 'Recent Doses:\n\n';
+            history.slice(0, 10).forEach((entry, index) => {
+                historyText += `${index + 1}. ${entry.name}\n`;
+                historyText += `   Taken: ${entry.timestamp}\n`;
+                historyText += `   Scheduled: ${entry.scheduledTime}\n\n`;
+            });
+            
+            alert(historyText);
+        }
+        
+        // Event listeners
+        document.getElementById('tookItBtn').addEventListener('click', logDose);
+        
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        
+        // Initialize
+        updateClock();
+        updateCountdown();
+    </script>
+</body>
+</html>

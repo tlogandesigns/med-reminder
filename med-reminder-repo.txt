@@ -1,0 +1,206 @@
+# 💊 Medicine Reminder Kiosk
+
+A dedicated e-Paper display medicine reminder system built for Raspberry Pi Zero 2 W with 2.13" Waveshare touch e-Paper display.
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-red.svg)
+
+## 📋 Features
+
+- ⏰ **Scheduled Reminders** - Morning (7:45 AM) and Night (10:00 PM) EST
+- 🖥️ **E-Paper Optimized** - Black & white display, low power consumption
+- 📊 **Dose Tracking** - Logs every dose with timestamp
+- 🔄 **Always On** - Countdown to next dose visible 24/7
+- 📱 **Responsive Alerts** - High contrast inverted display when dose is due
+- 📈 **History View** - Review past 100 doses taken
+
+## 🛠️ Hardware Requirements
+
+- **Raspberry Pi Zero 2 W** ($15) - with WiFi/Bluetooth
+- **Waveshare 2.13" Touch e-Paper Display** ($32) - HAT compatible
+- **MicroSD Card** (16GB minimum)
+- **USB Power Supply** (5V/2.5A recommended)
+- **Case** (optional but recommended)
+
+**Total Cost:** ~$50-70
+
+## 📦 Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+cd medicine-reminder
+```
+
+### 2. Hardware Setup
+
+1. Attach the Waveshare 2.13" e-Paper HAT to your Raspberry Pi Zero 2 W
+2. Insert microSD card with Raspberry Pi OS
+3. Connect power supply
+
+### 3. Software Installation
+
+```bash
+# Run the automated setup script
+chmod +x setup.sh
+./setup.sh
+```
+
+Or follow the [Manual Installation Guide](docs/INSTALLATION.md)
+
+### 4. Configuration
+
+Edit `config.json` to customize your medication schedule:
+
+```json
+{
+  "schedule": [
+    {
+      "name": "Morning Medicine",
+      "hour": 7,
+      "minute": 45
+    },
+    {
+      "name": "Night Medicine", 
+      "hour": 22,
+      "minute": 0
+    }
+  ],
+  "timezone": "America/New_York",
+  "alertWindow": 300
+}
+```
+
+### 5. Deploy
+
+**Option A: Web-Based (Recommended)**
+```bash
+# Upload index.html to your hosting provider
+# Update KIOSK_URL in setup.sh
+./deploy-web.sh
+```
+
+**Option B: Local Python**
+```bash
+python3 src/medicine_reminder.py
+```
+
+## 📁 Project Structure
+
+```
+medicine-reminder/
+├── index.html              # Main web app (e-Paper optimized)
+├── config.json             # Medication schedule configuration
+├── setup.sh                # Automated Raspberry Pi setup script
+├── deploy-web.sh           # Web deployment helper
+├── src/
+│   ├── medicine_reminder.py    # Python version (optional)
+│   └── epaper_driver.py        # E-Paper display driver
+├── docs/
+│   ├── INSTALLATION.md     # Detailed setup instructions
+│   ├── CONFIGURATION.md    # Configuration options
+│   └── HARDWARE.md         # Hardware assembly guide
+├── systemd/
+│   └── medicine-reminder.service   # Auto-start service
+├── LICENSE
+└── README.md
+```
+
+## 🚀 Deployment Options
+
+### Web-Based (Chromium Kiosk)
+- ✅ Easier to update (just refresh)
+- ✅ Full JavaScript features
+- ✅ Remote hosting (MakersHost, etc.)
+- ⚠️ Slightly higher power consumption
+
+### Python Direct Rendering
+- ✅ Ultra-low power
+- ✅ Fully offline
+- ✅ Direct e-Paper control
+- ⚠️ Requires Python updates for changes
+
+## 🔧 Customization
+
+### Change Alert Timing Window
+Edit `config.json`:
+```json
+"alertWindow": 300  // 5 minutes in seconds
+```
+
+### Modify Display Layout
+Edit `index.html` - CSS optimized for 250x122px e-Paper
+
+### Add More Medications
+Add entries to the `schedule` array in `config.json`
+
+## 📊 Dose History
+
+View dose history by tapping the "History" button (bottom-right corner) or checking localStorage in browser dev tools.
+
+History includes:
+- Medication name
+- Scheduled time
+- Actual time taken
+- Last 100 doses stored
+
+## 🔋 Power Consumption
+
+- **Idle:** ~0.5W (e-Paper only refreshes on updates)
+- **Active Alert:** ~0.8W
+- **Daily Average:** <12Wh (~$0.03/month at $0.12/kWh)
+
+## 🐛 Troubleshooting
+
+### Display Not Working
+```bash
+# Check SPI is enabled
+sudo raspi-config
+# Interface Options > SPI > Enable
+```
+
+### Time Zone Issues
+```bash
+# Set timezone
+sudo timedatectl set-timezone America/New_York
+```
+
+### Kiosk Not Auto-Starting
+```bash
+# Check autostart configuration
+cat ~/.config/lxsession/LXDE-pi/autostart
+
+# Restart X server
+sudo systemctl restart lightdm
+```
+
+See [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for more help.
+
+## 📝 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+
+## 📧 Contact
+
+**Logan Eason**  
+Director of Innovation & Digital Solutions  
+[GitHub](https://github.com/YOUR_USERNAME) | [LinkedIn](https://linkedin.com/in/loganeason)
+
+## 🙏 Acknowledgments
+
+- Waveshare for e-Paper HAT drivers
+- Bootstrap team for CSS framework
+- Raspberry Pi Foundation
+
+## ⭐ Star History
+
+If this project helped you, please consider giving it a star!
+
+---
+
+**Built with ❤️ for reliable medication adherence**
