@@ -49,7 +49,7 @@ Traditional phone reminders are easy to dismiss and forget. A dedicated, always-
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+git clone https://github.com/tlogandesigns/medicine-reminder.git
 cd medicine-reminder
 ```
 
@@ -297,7 +297,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Director of Innovation & Digital Solutions  
 Berkshire Hathaway HomeServices Beazley, REALTORS
 
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
+- GitHub: [@tlogandesigns](https://github.com/tlogandesigns)
 - LinkedIn: [loganeason](https://linkedin.com/in/loganeason)
 - Website: [your-website.com](https://your-website.com)
 

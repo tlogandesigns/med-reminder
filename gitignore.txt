@@ -49,3 +49,4 @@ test_output/
 # Personal notes
 notes.md
 TODO.md
+CLAUDE.md

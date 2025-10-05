@@ -102,7 +102,7 @@ passwd
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+git clone https://github.com/tlogandesigns/medicine-reminder.git
 cd medicine-reminder
 
 # Make setup script executable
@@ -137,7 +137,7 @@ cd ~
 git clone https://github.com/waveshare/e-Paper
 
 # Clone medicine reminder
-git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+git clone https://github.com/tlogandesigns/medicine-reminder.git
 cd medicine-reminder
 ```
 

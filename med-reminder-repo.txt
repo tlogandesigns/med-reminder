@@ -29,7 +29,7 @@ A dedicated e-Paper display medicine reminder system built for Raspberry Pi Zero
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+git clone https://github.com/tlogandesigns/medicine-reminder.git
 cd medicine-reminder
 ```
 
@@ -187,9 +187,9 @@ Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## 📧 Contact
 
-**Logan Eason**  
-Director of Innovation & Digital Solutions  
-[GitHub](https://github.com/YOUR_USERNAME) | [LinkedIn](https://linkedin.com/in/loganeason)
+**Logan Eason**
+Director of Innovation & Digital Solutions
+[GitHub](https://github.com/tlogandesigns) | [LinkedIn](https://linkedin.com/in/loganeason)
 
 ## 🙏 Acknowledgments
 

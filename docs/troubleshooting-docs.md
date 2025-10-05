@@ -795,7 +795,7 @@ ping -c 4 8.8.8.8
 
 ### Community Resources
 
-- **GitHub Issues:** [Create an issue](https://github.com/YOUR_USERNAME/medicine-reminder/issues)
+- **GitHub Issues:** [Create an issue](https://github.com/tlogandesigns/medicine-reminder/issues)
 - **Raspberry Pi Forums:** [raspberrypi.org/forums](https://forums.raspberrypi.org/)
 - **Reddit:** [r/raspberry_pi](https://reddit.com/r/raspberry_pi)
 - **Discord:** [Raspberry Pi Discord](https://discord.gg/raspberrypi)
@@ -822,7 +822,7 @@ Avoid future issues by:
 
 ---
 
-**Still having issues?** Open a [GitHub issue](https://github.com/YOUR_USERNAME/medicine-reminder/issues) with details.
+**Still having issues?** Open a [GitHub issue](https://github.com/tlogandesigns/medicine-reminder/issues) with details.
 
 ---
 
@@ -868,7 +868,7 @@ rm ~/.config/lxsession/LXDE-pi/autostart
 sudo reboot
 
 # Reinstall medicine reminder
-git clone https://github.com/YOUR_USERNAME/medicine-reminder.git
+git clone https://github.com/tlogandesigns/medicine-reminder.git
 cd medicine-reminder
 ./setup.sh
 ```
@@ -1384,7 +1384,7 @@ If system fails and you need dose history:
 
 ---
 
-**Need immediate help?** Create a [GitHub Issue](https://github.com/YOUR_USERNAME/medicine-reminder/issues) with:
+**Need immediate help?** Create a [GitHub Issue](https://github.com/tlogandesigns/medicine-reminder/issues) with:
 - Exact error message
 - Output of `./diagnostics.sh`
 - Photos of setup (if hardware issue)
